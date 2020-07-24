@@ -13,7 +13,7 @@ We allow duplication of number or name.. only id is primary key. we assume the r
 User needs to have maven and java8 installed in local environment in order to run this application, this application will be run on windows system.
 please follow these steps:
  ```
-   git clone https://github.com/yinchunli/springboot-claims
+   git clone https://github.com/yinchunli/springboot-payment
    mvn clean install 
    mvn spring-boot:run
 ``` 
@@ -29,15 +29,19 @@ http://localhost:8080/v3/api-docs
 #Testing Via Postman
 input json:
 
-Create payment POST /payments/{customerId}
-
-Update individual payment PUT /payments/{customerId}
-
-Get Payment GET /payments
-
-Get individual payments GET /payments/{customerId}
-
-Delete individual contacts DELETE /payments/{customerId}
+	Create payment POST /payments/{customerId}
+	
+	Update individual payment PUT /payments/{customerId}
+	
+	Get Payment GET /payments
+	
+	Get individual payments GET /payments/{customerId}
+	
+	Delete individual contacts DELETE /payments/{customerId}
+	
+	GET	/payments/customer/{customerId}/{year}/{month} List all payments for customer on the month of the year
+	
+	GET	/payments/customer/{customerId}/{year}/{fromMonth}/{toMonth}  List all payments for customer on the year in between
 
 #Logs
 Lomok sl4j is used in application level log, and log level is set to info level. Hibernate SQL is turned on. 

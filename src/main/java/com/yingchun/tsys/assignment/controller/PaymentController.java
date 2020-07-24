@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yingchun.tsys.assignment.exception.ResourceNotFoundException;
 import com.yingchun.tsys.assignment.model.Payment;
-import com.yingchun.tsys.assignment.model.PaymentHistory;
-import com.yingchun.tsys.assignment.service.PaymentHistoryService;
 import com.yingchun.tsys.assignment.service.PaymentService;
 import com.yingchun.tsys.assignment.util.ResponseUtil;
 
@@ -28,7 +27,7 @@ import com.yingchun.tsys.assignment.util.ResponseUtil;
  * PUT	/payments/{paymentId}	Update a payment
  * DELETE	/payments/{paymentId}	Delete a payment
  * GET	/payments/{paymentId}	Get a specific payment
- * GET	/payments/customer/{customerId}/{year}/{month} List all payments for customer on the month of the year
+ * GET	/payments/customer/history/{customerId}/{year}/{month} List all payments for customer on the month of the year
  * GET	/payments/customer/{customerId}/{year}/{fromMonth}/{toMonth}  List all payments for customer on the year in between
  * 
  * 
@@ -39,6 +38,9 @@ public class PaymentController {
 
 	@Autowired 
 	private PaymentService paymentService;
+
+	@Autowired
+	Environment environment;
 
 	@GetMapping(path="/payments/customer/{customerId}", produces = "application/json")
 	public List<Payment> findAllPayments(@PathVariable Integer customerId) {
@@ -109,13 +111,16 @@ public class PaymentController {
 	public List<Payment>  findcustomerFromToByCustomerId(@PathVariable Integer customerId,
 			@PathVariable Integer year, @PathVariable Integer from, @PathVariable Integer to
 			) throws Throwable {
+			
 			return	paymentService.getPaymentsHistoryBetween4PaymentHistory(customerId, year, from, to);
 	}
 	
-	@GetMapping(path = "/payments/customer/{customerId}/{year}/{month}", produces = "application/json")
+	@GetMapping(path = "/payments/customer/history/{customerId}/{year}/{month}", produces = "application/json")
 	public List<Payment>  findPaymentHistoryOfMonthByCustomerId(@PathVariable Integer customerId,
 			@PathVariable Integer year, @PathVariable Integer month
 			) throws Throwable {
+//		String port = environment.getProperty("local.server.port");
+//		
 		return	paymentService.getPaymentsHistoryOfMonthAndYear4PaymentHistory(customerId, year, month);
 	}
 }
