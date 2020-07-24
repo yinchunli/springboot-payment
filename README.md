@@ -39,7 +39,7 @@ input json:
 	
 	Delete individual contacts DELETE /payments/{customerId}
 	
-	GET	/payments/customer/{customerId}/{year}/{month} List all payments for customer on the month of the year
+	GET	/payments/customer/history/{customerId}/{year}/{month} List all payments for customer on the month of the year
 	
 	GET	/payments/customer/{customerId}/{year}/{fromMonth}/{toMonth}  List all payments for customer on the year in between
 
