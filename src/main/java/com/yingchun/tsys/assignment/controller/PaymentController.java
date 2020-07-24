@@ -1,5 +1,7 @@
 package com.yingchun.tsys.assignment.controller;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yingchun.tsys.assignment.exception.ResourceNotFoundException;
 import com.yingchun.tsys.assignment.model.Payment;
 import com.yingchun.tsys.assignment.service.PaymentService;
+import com.yingchun.tsys.assignment.service.ServiceAdapter;
 import com.yingchun.tsys.assignment.util.ResponseUtil;
 
 /**
@@ -42,6 +45,12 @@ public class PaymentController {
 	@Autowired
 	Environment environment;
 
+	@Autowired
+	ServiceAdapter systemServiceA;
+	
+	@Autowired
+	ServiceAdapter systemServiceB;
+	
 	@GetMapping(path="/payments/customer/{customerId}", produces = "application/json")
 	public List<Payment> findAllPayments(@PathVariable Integer customerId) {
 		return paymentService.getAllPayments4Customer(customerId);
@@ -114,13 +123,47 @@ public class PaymentController {
 			
 			return	paymentService.getPaymentsHistoryBetween4PaymentHistory(customerId, year, from, to);
 	}
-	
+		
 	@GetMapping(path = "/payments/customer/history/{customerId}/{year}/{month}", produces = "application/json")
 	public List<Payment>  findPaymentHistoryOfMonthByCustomerId(@PathVariable Integer customerId,
 			@PathVariable Integer year, @PathVariable Integer month
 			) throws Throwable {
-//		String port = environment.getProperty("local.server.port");
-//		
+		LocalDate currentdate = LocalDate.now();
+		Month currentMonth = currentdate.getMonth();
+		
+		boolean runAB=false;
+		
+		//in condition of the exception, to gracefully exit, we can add time out or sleep/wait/retry for certain periods
+		if(runAB) {
+			try {
+				systemServiceA.process(month);
+			}catch(Exception e) {
+				System.out.println();
+			}
+			try {
+				systemServiceB.process(month);
+			}catch(Exception e) {
+				systemServiceB.process(month);
+				System.out.println();
+			}
+		}
+		else {
+			if(month==currentMonth.getValue()) {
+				try {
+					systemServiceA.process(month);
+				}catch(Exception e) {
+					systemServiceB.process(month);
+				}
+			}
+			else {
+				try {
+					systemServiceB.process(month);
+				}catch(Exception e) {
+					systemServiceB.process(month);
+				}
+			}
+		}
+		
 		return	paymentService.getPaymentsHistoryOfMonthAndYear4PaymentHistory(customerId, year, month);
 	}
 }
