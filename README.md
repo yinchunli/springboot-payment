@@ -23,6 +23,9 @@ please follow these steps:
 
 ![image](https://user-images.githubusercontent.com/68702751/88400675-ac6f8680-cd96-11ea-8baa-ef81eeaa56b0.png)
 
+# AdaptorService
+![image](https://user-images.githubusercontent.com/68702751/88425093-ccb23c00-cdbc-11ea-829f-c812410ab100.png)
+
 # Running the Application
 To run the project:
 mvn spring-boot:run
